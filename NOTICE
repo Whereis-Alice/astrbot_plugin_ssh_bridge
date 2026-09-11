@@ -1,0 +1,12 @@
+SSH Bridge
+Copyright (c) 2026 Whereis-Alice
+
+This plugin is a modified version of astrbot_plugin_ssh by 星见雅（xinjianya）:
+https://github.com/HSOS6/astrbot_plugin_ssh
+
+Modifications include the plugin identity, multi-server profiles, Windows
+OpenSSH support, command execution hardening, output handling, documentation,
+and tests. The upstream copyright and license notice are retained.
+
+This project is licensed under the GNU Affero General Public License v3.0.
+See LICENSE for the full license text.

@@ -1,90 +1,187 @@
 {
-    "host": {
-        "description": "SSH 主机地址(必填)‼️",
-        "type": "string",
-        "default": "192.168.1.128",
-        "hint": "服务器 IP 或域名，例如: 192.168.1.114",
-        "obvious_hint": true
-    },
-    "port": {
-        "description": "SSH 端口",
-        "type": "int",
-        "default": 22,
-        "hint": "默认一般为 22"
-    },
-    "username": {
-        "description": "SSH 用户名(必填)‼️",
-        "type": "string",
-        "default": "root",
-        "hint": "登录服务器的用户名",
-        "obvious_hint": true
-    },
-    "password": {
-        "description": "SSH 密码",
-        "type": "string",
-        "default": "123456",
-        "hint": "登录密码（明文存储，请注意安全；若使用密钥登录则可不填）",
-        "obvious_hint": true
-    },
-    "private_key": {
-        "description": "SSH 私钥内容",
-        "type": "text",
-        "default": "",
-        "hint": "用于密钥登录的私钥内容（PEM 格式，以 -----BEGIN ... 开头）。若填写则优先使用密钥登录。",
-        "obvious_hint": false
-    },
-    "timeout": {
-        "description": "连接超时时间（秒）",
-        "type": "int",
-        "default": 10,
-        "hint": "SSH 连接超时"
-    },
-    "idle_timeout": {
-        "description": "闲置断开时间（分钟）",
-        "type": "int",
-        "default": 30,
-        "hint": "SSH 会话无操作自动断开的时间（分钟）"
-    },
-    "log_size": {
-        "description": "日志记录条数",
-        "type": "int",
-        "default": 5,
-        "hint": "使用 /ssh log 指令时显示的最近命令执行记录条数"
-    },
-    "enable_history": {
-        "description": "启用历史记录",
-        "type": "bool",
-        "default": true,
-        "hint": "是否记录命令执行历史（关闭后 /ssh log 不可用，减少敏感信息留存）"
-    },
-    "enable_dangerous_commands": {
-        "description": "允许高危命令",
-        "type": "bool",
-        "default": false,
-        "hint": "开启后跳过所有白名单和黑名单检查，允许执行任意命令（严重警告！慎用！！）"
-    },
-    "command_whitelist": {
-        "description": "命令白名单",
-        "type": "list",
-        "default": [],
-        "hint": "自定义允许直接执行的命令前缀列表，留空则使用内置默认白名单。不在白名单中的命令需要二次确认，LLM 无法自动执行。"
-    },
-    "max_output_bytes": {
-        "description": "最大输出字节数",
-        "type": "int",
-        "default": 32768,
-        "hint": "单次命令输出的最大读取字节数（默认 32KB），超出后截断显示"
-    },
-    "max_exec_time": {
-        "description": "单命令最大执行时长（秒）",
-        "type": "int",
-        "default": 30,
-        "hint": "单条命令的最大执行等待时间（秒），超时后截断输出"
-    },
-    "known_hosts_path": {
-        "description": "known_hosts 文件路径",
-        "type": "string",
-        "default": "",
-        "hint": "SSH known_hosts 文件绝对路径，留空则使用插件目录下的 known_hosts 文件（首次连接自动获取并保存主机密钥）"
+  "servers": {
+    "type": "template_list",
+    "description": "服务器档案",
+    "hint": "可配置多台 Linux 或 Windows 服务器；每台服务器需要唯一名称。",
+    "obvious_hint": true,
+    "default": [],
+    "templates": {
+      "server": {
+        "name": "服务器",
+        "items": {
+          "name": {
+            "type": "string",
+            "description": "服务器名称",
+            "default": "main",
+            "hint": "用于 /ssh use 和 LLM 工具，仅支持字母、数字、点、下划线、中划线。"
+          },
+          "host": {
+            "type": "string",
+            "description": "SSH 主机地址",
+            "default": "",
+            "hint": "IP 或域名。Windows 目标也需要能从 AstrBot 服务器网络直达。"
+          },
+          "port": {
+            "type": "int",
+            "description": "SSH 端口",
+            "default": 22
+          },
+          "username": {
+            "type": "string",
+            "description": "SSH 用户名",
+            "default": ""
+          },
+          "password": {
+            "type": "string",
+            "description": "SSH 密码",
+            "default": "",
+            "hint": "与私钥二选一。建议生产环境优先使用私钥。"
+          },
+          "private_key_path": {
+            "type": "string",
+            "description": "SSH 私钥文件路径",
+            "default": "",
+            "hint": "AstrBot 运行用户需要具备读取权限。"
+          },
+          "private_key": {
+            "type": "text",
+            "description": "SSH 私钥内容",
+            "default": "",
+            "hint": "PEM/OpenSSH 私钥内容。填写私钥内容时优先于密码。"
+          },
+          "private_key_passphrase": {
+            "type": "string",
+            "description": "私钥口令",
+            "default": "",
+            "hint": "仅私钥需要口令时填写。"
+          },
+          "platform": {
+            "type": "string",
+            "description": "远端系统类型",
+            "default": "linux",
+            "options": ["linux", "windows"]
+          },
+          "encoding": {
+            "type": "string",
+            "description": "远端输出编码",
+            "default": "utf-8",
+            "hint": "Linux 通常使用 utf-8；中文 Windows 常见值为 gbk 或 gb18030。"
+          },
+          "execution_mode": {
+            "type": "string",
+            "description": "命令执行模式",
+            "default": "auto",
+            "options": ["auto", "shell", "run"],
+            "hint": "auto: Linux 用 shell，Windows 用 run。shell 保留 cd/export 状态；run 更稳但不保留状态。"
+          },
+          "host_key_policy": {
+            "type": "string",
+            "description": "主机密钥策略",
+            "default": "tofu",
+            "options": ["tofu", "strict"],
+            "hint": "tofu 首次连接自动记录密钥；strict 只信任 known_hosts 中已有密钥。"
+          },
+          "known_hosts_path": {
+            "type": "string",
+            "description": "该服务器的 known_hosts 路径",
+            "default": "",
+            "hint": "留空使用全局路径。"
+          },
+          "command_whitelist": {
+            "type": "list",
+            "description": "该服务器白名单",
+            "default": [],
+            "hint": "留空使用全局白名单；全局也留空则使用按系统内置的保守白名单。"
+          },
+          "enabled": {
+            "type": "bool",
+            "description": "启用服务器",
+            "default": true
+          }
+        }
+      }
     }
+  },
+  "default_server": {
+    "type": "string",
+    "description": "默认服务器名称",
+    "default": "",
+    "hint": "留空时使用第一个启用的服务器。"
+  },
+  "known_hosts_path": {
+    "type": "string",
+    "description": "全局 known_hosts 路径",
+    "default": "",
+    "hint": "留空时写入 AstrBot 插件数据目录，不会污染插件源码目录。"
+  },
+  "connect_timeout": {
+    "type": "int",
+    "description": "SSH 连接超时（秒）",
+    "default": 10
+  },
+  "command_whitelist": {
+    "type": "list",
+    "description": "全局命令白名单",
+    "default": [],
+    "hint": "使用命令前缀匹配。留空时使用按系统内置的保守白名单。"
+  },
+  "enable_dangerous_commands": {
+    "type": "bool",
+    "description": "允许任意命令",
+    "default": false,
+    "hint": "开启后跳过白名单、二次确认和黑名单，仅建议在一次性临时环境中使用。"
+  },
+  "enable_history": {
+    "type": "bool",
+    "description": "记录执行历史",
+    "default": true
+  },
+  "history_size": {
+    "type": "int",
+    "description": "每个会话保留的历史条数",
+    "default": 50,
+    "hint": "设为 0 可不保留历史。"
+  },
+  "log_size": {
+    "type": "int",
+    "description": "/ssh log 默认显示条数",
+    "default": 5
+  },
+  "confirm_timeout": {
+    "type": "int",
+    "description": "二次确认有效期（秒）",
+    "default": 60
+  },
+  "command_timeout": {
+    "type": "int",
+    "description": "单条命令超时（秒）",
+    "default": 30
+  },
+  "idle_timeout": {
+    "type": "int",
+    "description": "会话闲置断开时间（分钟）",
+    "default": 30
+  },
+  "max_command_length": {
+    "type": "int",
+    "description": "最大命令长度（字符）",
+    "default": 4096
+  },
+  "max_output_bytes": {
+    "type": "int",
+    "description": "最大输出字节数",
+    "default": 32768
+  },
+  "max_lines": {
+    "type": "int",
+    "description": "最大输出行数",
+    "default": 80
+  },
+  "output_mode": {
+    "type": "string",
+    "description": "输出方式",
+    "default": "auto",
+    "options": ["auto", "text"],
+    "hint": "auto 在长输出时尝试转为图片，失败则回退文本。"
+  }
 }

@@ -1,21 +1,20 @@
-## 📝 更新日志
-### v1.4.0
-- 修复了亿些bug
-- 增加主机密钥 TOFU + 严格校验机制
-- 命令安全升级为黑名单 + 白名单 + 二次确认
-- 增加输出总量/执行时长限制，防止可用性风险
-- 增加日志与历史系统化脱敏
-- 增加 `enable_history`、`command_whitelist`、`max_output_bytes`、`max_exec_time`
-- 连接失败对用户返回通用错误，详细异常仅写日志
-- 增加了更多的问题
-### v1.3.1
-- 增加了密钥登录的功能，增加安全性
-### v1.3.0
-- 修改了一些bug，增加了一些问题
-### v1.2.0
-- 修改了一些问题，增加安全性
-### v1.1.Beta
-- 支持使用ssh log查看执行的内容
-### v1.0.Beta
-- 初始版本发布。
-- 支持交互式 Shell、LLM 调用。
+# Changelog
+
+## v2.0.0
+
+- Renamed the plugin to `astrbot_plugin_ssh_bridge` with a new identity and logo.
+- Added multi-server profiles and per-admin server switching.
+- Added Windows OpenSSH support with a Windows command whitelist.
+- Added `run` execution mode for stable one-shot commands.
+- Replaced silence-based interactive output detection with completion markers.
+- Added connection diagnosis, status, server list, and richer help commands.
+- Moved generated `known_hosts` data to the AstrBot plugin data directory.
+- Added command timeout, output limits, history limits, and confirm timeout settings.
+- Tightened default command safety rules and masked sensitive output.
+- Fixed command filter ordering and added an in-tool administrator check for LLM calls.
+- Added unit tests for profiles and command safety.
+- Rewrote the public documentation and retained the upstream AGPL-3.0 notice.
+
+## Upstream v1.5.x
+
+See the original project history at <https://github.com/HSOS6/astrbot_plugin_ssh>.

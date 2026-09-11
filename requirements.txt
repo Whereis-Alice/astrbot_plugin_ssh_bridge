@@ -1,1 +1,1 @@
-asyncssh
+asyncssh>=2.21,<3
