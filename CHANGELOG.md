@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.3
+
+- Replaced the plugin logo with the final supplied artwork.
+
 ## v2.0.2
 
 - Replaced the plugin logo with the supplied artwork.
