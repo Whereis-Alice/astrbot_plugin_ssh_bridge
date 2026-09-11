@@ -1,13 +1,37 @@
 from __future__ import annotations
 
 import asyncio
+import importlib
+import sys
+import types
 import unittest
+from pathlib import Path
 
 from astrbot.core.star.filter.command import CommandFilter
 from astrbot.core.star.filter.permission import PermissionTypeFilter
 from astrbot.core.star.star_handler import star_handlers_registry
 
-from main import SSHBridgePlugin
+PLUGIN_ROOT = Path(__file__).resolve().parents[1]
+PLUGIN_PACKAGE = "data.plugins.astrbot_plugin_ssh_bridge"
+
+
+def _import_plugin_main():
+    """Import main.py using AstrBot's actual dotted plugin path."""
+    if PLUGIN_PACKAGE not in sys.modules:
+        for name in ("data", "data.plugins"):
+            if name not in sys.modules:
+                parent = types.ModuleType(name)
+                parent.__path__ = []
+                sys.modules[name] = parent
+
+        package = types.ModuleType(PLUGIN_PACKAGE)
+        package.__path__ = [str(PLUGIN_ROOT)]
+        sys.modules[PLUGIN_PACKAGE] = package
+
+    return importlib.import_module(f"{PLUGIN_PACKAGE}.main")
+
+
+SSHBridgePlugin = _import_plugin_main().SSHBridgePlugin
 
 
 class _Event:
@@ -37,7 +61,9 @@ class ExtractCommandTests(unittest.TestCase):
 
 class HandlerRegistrationTests(unittest.TestCase):
     def test_command_filter_runs_before_permission_filter(self):
-        handler = star_handlers_registry.get_handler_by_full_name("main_ssh_cmd")
+        handler = star_handlers_registry.get_handler_by_full_name(
+            f"{PLUGIN_PACKAGE}.main_ssh_cmd"
+        )
         self.assertIsNotNone(handler)
         filters = handler.event_filters
         self.assertIsInstance(filters[0], CommandFilter)

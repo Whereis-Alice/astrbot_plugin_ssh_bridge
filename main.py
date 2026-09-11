@@ -8,10 +8,10 @@ from astrbot.api import AstrBotConfig, logger
 from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.star import Context, Star, StarTools
 
-from ssh_bridge import PLUGIN_NAME
-from ssh_bridge.executor import CommandResult, SSHBridgeError, SSHSessionManager
-from ssh_bridge.profiles import ProfileError, ProfileSet, ServerProfile, load_profiles
-from ssh_bridge.security import CheckResult, check_command, sanitize_text
+from .ssh_bridge import PLUGIN_NAME
+from .ssh_bridge.executor import CommandResult, SSHBridgeError, SSHSessionManager
+from .ssh_bridge.profiles import ProfileError, ProfileSet, ServerProfile, load_profiles
+from .ssh_bridge.security import CheckResult, check_command, sanitize_text
 
 
 class SSHBridgePlugin(Star):

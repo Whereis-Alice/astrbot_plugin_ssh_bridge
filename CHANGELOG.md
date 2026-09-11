@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.1
+
+- Fixed plugin installation on AstrBot by importing local modules relative to the plugin package.
+- Added a regression test that imports `main.py` through AstrBot's `data.plugins.<plugin>.main` path.
+
 ## v2.0.0
 
 - Renamed the plugin to `astrbot_plugin_ssh_bridge` with a new identity and logo.
