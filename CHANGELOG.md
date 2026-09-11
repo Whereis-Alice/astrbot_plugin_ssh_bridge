@@ -1,34 +1,34 @@
-# Changelog
+# 更新日志
 
 ## v2.0.3
 
-- Replaced the plugin logo with the final supplied artwork.
+- 将插件 Logo 替换为最终提供的版本。
 
 ## v2.0.2
 
-- Replaced the plugin logo with the supplied artwork.
-- Removed the previous SVG logo source.
+- 将插件 Logo 替换为提供的版本。
+- 移除旧的 SVG Logo 源文件。
 
 ## v2.0.1
 
-- Fixed plugin installation on AstrBot by importing local modules relative to the plugin package.
-- Added a regression test that imports `main.py` through AstrBot's `data.plugins.<plugin>.main` path.
+- 修复插件在 AstrBot 中安装失败的问题，改为相对导入本地模块。
+- 新增回归测试，按 AstrBot 的 `data.plugins.<plugin>.main` 路径导入 `main.py`。
 
 ## v2.0.0
 
-- Renamed the plugin to `astrbot_plugin_ssh_bridge` with a new identity and logo.
-- Added multi-server profiles and per-admin server switching.
-- Added Windows OpenSSH support with a Windows command whitelist.
-- Added `run` execution mode for stable one-shot commands.
-- Replaced silence-based interactive output detection with completion markers.
-- Added connection diagnosis, status, server list, and richer help commands.
-- Moved generated `known_hosts` data to the AstrBot plugin data directory.
-- Added command timeout, output limits, history limits, and confirm timeout settings.
-- Tightened default command safety rules and masked sensitive output.
-- Fixed command filter ordering and added an in-tool administrator check for LLM calls.
-- Added unit tests for profiles and command safety.
-- Rewrote the public documentation and retained the upstream AGPL-3.0 notice.
+- 插件更名为 `astrbot_plugin_ssh_bridge`，并更新插件标识和 Logo。
+- 新增多服务器档案，并支持按管理员切换当前服务器。
+- 支持 Windows OpenSSH，并提供 Windows 命令白名单。
+- 新增 `run` 执行模式，用于更稳定的一次性命令执行。
+- 使用完成标记替代基于静默时间的交互式输出检测。
+- 新增连接诊断、状态查看、服务器列表和更完整的帮助指令。
+- 生成的 `known_hosts` 数据移至 AstrBot 插件数据目录。
+- 新增命令超时、输出限制、历史记录限制和二次确认有效期配置。
+- 收紧默认命令安全规则，并对敏感输出进行遮蔽。
+- 修复指令过滤器顺序，并为 LLM 工具内部增加管理员校验。
+- 为服务器档案和命令安全添加单元测试。
+- 重写公开文档，并保留上游 AGPL-3.0 声明。
 
 ## Upstream v1.5.x
 
-See the original project history at <https://github.com/HSOS6/astrbot_plugin_ssh>.
+上游 v1.5.x 的历史记录见 <https://github.com/HSOS6/astrbot_plugin_ssh>。
