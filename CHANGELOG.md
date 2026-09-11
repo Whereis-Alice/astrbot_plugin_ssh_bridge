@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.2
+
+- Replaced the plugin logo with the supplied artwork.
+- Removed the previous SVG logo source.
+
 ## v2.0.1
 
 - Fixed plugin installation on AstrBot by importing local modules relative to the plugin package.
